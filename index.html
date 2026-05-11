@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Football Empire MVP</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #111;
+      color: white;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .card {
+      background: #222;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>⚽ Football Empire MVP</h1>
+
+<button onclick="createClub()">Create Club</button>
+<button onclick="playMatch()">Play Match</button>
+
+<h2 id="club"></h2>
+<h3 id="coins"></h3>
+<p id="result"></p>
+
+<h2>Players</h2>
+<div id="players"></div>
+
+<script>
+let club = null;
+let players = [];
+
+function createClub() {
+  club = {
+    name: "My FC",
+    coins: 1000
+  };
+
+  players = [];
+
+  for (let i = 0; i < 11; i++) {
+    players.push({
+      name: "Player " + (i + 1),
+      rating: 50 + Math.floor(Math.random() * 30)
+    });
+  }
+
+  render();
+}
+
+function playMatch() {
+  if (!club) return alert("Create club first!");
+
+  let teamStrength = 0;
+
+  players.forEach(p => {
+    teamStrength += p.rating;
+  });
+
+  let enemyStrength = 600 + Math.random() * 200;
+
+  let winChance = teamStrength / (teamStrength + enemyStrength);
+
+  let roll = Math.random();
+
+  if (roll < winChance) {
+    club.coins += 300;
+    document.getElementById("result").innerText = "🔥 You WON 2-1 (+300 coins)";
+  } else {
+    club.coins += 50;
+    document.getElementById("result").innerText = "😢 You LOST 1-2 (+50 coins)";
+  }
+
+  render();
+}
+
+function render() {
+  document.getElementById("club").innerText =
+    club ? club.name : "No club yet";
+
+  document.getElementById("coins").innerText =
+    club ? "Coins: " + club.coins : "";
+
+  let html = "";
+
+  players.forEach(p => {
+    html += `<div class="card">${p.name} - ${p.rating}</div>`;
+  });
+
+  document.getElementById("players").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
